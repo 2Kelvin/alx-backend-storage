@@ -6,11 +6,13 @@ CREATE FUNCTION SafeDiv(a INT, b INT)
     RETURNS FLOAT
     DETERMINISTIC
     BEGIN
-        IF b == 0 THEN
-            RETURN 0;
+        DECLARE answer FLOAT DEFAULT 0;
+
+        IF b != 0 THEN
+            SET answer = a / b;
         ENDIF;
 
-        RETURN a / b;
+        RETURN answer;
     END //
 
 DELIMITER ;

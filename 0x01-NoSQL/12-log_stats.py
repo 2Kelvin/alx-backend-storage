@@ -8,7 +8,7 @@ def nginxLogs(collection):
     print(f'{collection.count_documents()} logs')
     print('Methods:')
 
-    httpMethods = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT']
+    httpMethods = ['GET', 'POST', 'PUT', 'PATCH' 'DELETE']
 
     for httpMethod in httpMethods:
         methodCount = len(list(collection.find({"method": httpMethod})))
@@ -19,5 +19,5 @@ def nginxLogs(collection):
 
 
 if __name__ == '__main__':
-    collection = MongoClient("mongodb://localhost:27017")
-    nginxLogs(collection.logs.nginx)
+    mongoClient = MongoClient("mongodb://localhost:27017")
+    nginxLogs(mongoClient.logs.nginx)

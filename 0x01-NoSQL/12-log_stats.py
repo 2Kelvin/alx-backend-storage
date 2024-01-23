@@ -11,10 +11,10 @@ def nginxLogs(collection):
     httpMethods = ['GET', 'POST', 'DELETE', 'PATCH', 'PUT']
 
     for httpMethod in httpMethods:
-        methodCount = collection.count_documents({"method": httpMethod})
+        methodCount = len(list(collection.find({"method": httpMethod})))
         print(f'\tmethod {httpMethod}: {methodCount}')
 
-    getCount = collection.count_documents({"method": "GET", "path": "/status"})
+    getCount = len(list(collection.find({"method": "GET", "path": "/status"})))
     print(f'{getCount} status check')
 
 

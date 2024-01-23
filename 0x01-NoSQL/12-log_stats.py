@@ -19,5 +19,5 @@ def nginxLogs(collection):
 
 
 if __name__ == '__main__':
-    mongoClient = MongoClient("mongodb://localhost:27017")
+    mongoClient = MongoClient("mongodb://127.0.0.1:27017")
     nginxLogs(mongoClient.logs.nginx)

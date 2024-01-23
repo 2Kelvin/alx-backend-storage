@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 def nginxLogs(collection):
     '''provides nginx log stats stored in mongodb'''
-    print(f'{collection.count()} logs')
+    print(f'{collection.estimated_document_count()} logs')
 
     print('Methods:')
 
@@ -20,5 +20,5 @@ def nginxLogs(collection):
 
 
 if __name__ == '__main__':
-    collection = MongoClient("mongodb://localhost:27017/").logs.nginx
+    collection = MongoClient("mongodb://localhost:27017").logs.nginx
     nginxLogs(collection)

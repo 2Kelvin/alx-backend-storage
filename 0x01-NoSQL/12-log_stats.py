@@ -5,7 +5,7 @@ from pymongo import MongoClient
 
 def nginxLogs(collection):
     '''provides nginx log stats stored in mongodb'''
-    print(f'{collection.count_documents()} logs')
+    print(f'{collection.count_documents({})} logs')
     print('Methods:')
 
     httpMethods = ['GET', 'POST', 'PUT', 'PATCH' 'DELETE']
@@ -19,5 +19,5 @@ def nginxLogs(collection):
 
 
 if __name__ == '__main__':
-    mongoClient = MongoClient("mongodb://127.0.0.1:27017")
+    mongoClient = MongoClient("mongodb://localhost:27017")
     nginxLogs(mongoClient.logs.nginx)

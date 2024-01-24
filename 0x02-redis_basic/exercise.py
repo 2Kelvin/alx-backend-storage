@@ -17,6 +17,22 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    '''store function i/o history'''
+    @wraps(method)
+    def wrapper(self, *args, **kwargs) -> Any:
+        '''wrapper'''
+        inpArr = f'{method.__qualname__}:inputs'
+        outArr = f'{method.__qualname__}:outputs'
+        if isinstance(self._redis, redis.Redis):
+            self._redis.rpush(inpArr, str(args))
+        out = method(self, *args, **kwargs)
+        if isinstance(self._redis, redis.Redis):
+            self._redis.rpush(outArr, out)
+        return out
+    return wrapper
+
+
 class Cache:
     '''class Cache'''
 
@@ -25,6 +41,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         '''stores data in Redis db using the randomly generated key'''

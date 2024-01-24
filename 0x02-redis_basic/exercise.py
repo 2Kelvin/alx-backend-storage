@@ -43,10 +43,10 @@ def replay(fn: Callable) -> None:
     functionName = fn.__qualname__
     inpArr = f'{functionName}:inputs'
     outArr = f'{functionName}:outputs'
-    func_call_count = 0
+    functionCount = 0
     if rStore.exists(functionName) != 0:
-        func_call_count = int(rStore.get(functionName))
-    print(f'{functionName} was called {func_call_count} times:')
+        functionCount = int(rStore.get(functionName))
+    print(f'{functionName} was called {functionCount} times:')
     inp = rStore.lrange(inpArr, 0, -1)
     out = rStore.lrange(outArr, 0, -1)
     for i, o in zip(inp, out):

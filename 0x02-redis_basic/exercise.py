@@ -24,9 +24,6 @@ class Cache:
             fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
         '''custom get() method'''
         value = self._redis.get(key)
-        if not value:
-            return None
-
         if fn:
             value = fn(value)
 

@@ -3,7 +3,6 @@
 import redis
 import uuid
 from typing import Union, Optional, Callable
-import sys
 
 
 class Cache:
@@ -11,8 +10,7 @@ class Cache:
 
     def __init__(self) -> None:
         '''class constructor'''
-        self._redis = redis.Redis(
-            host='localhost', port=6379, decode_responses=True)
+        self._redis = redis.Redis()
         self._redis.flushdb()
 
     def store(self, data: Union[str, bytes, int, float]) -> str:
@@ -21,18 +19,21 @@ class Cache:
         self._redis.set(randomKey, data)
         return randomKey
 
-    def get(self, key: str, fn: Optional[Callable] = None)\
-            -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn:
+            Optional[Callable[[bytes], Union[str, bytes, int, float]]] = None)\
+            -> Union[str, bytes, int, float, None]:
         '''custom get() method'''
-        if fn:
-            return fn(self._redis.get(key))
+        data = self._redis.get(key)
+        if data is None:
+            return None
+        if fn is not None:
+            data = fn(data)
+        return data
 
-        return self._redis.get(key)
-
-    def get_str(self) -> str:
+    def get_str(self, key: str) -> Optional[str]:
         '''convert redis data to regular string'''
-        return self.decode("utf-8")
+        return self.get(key, lambda x: x.decode("utf-8"))
 
-    def get_int(self) -> int:
+    def get_int(self, key: str) -> Optional[int]:
         '''convert redis data to regular int'''
-        return int.from_bytes(self, sys.byteorder)
+        return self.get(key, lambda x: int(x))

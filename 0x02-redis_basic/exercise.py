@@ -21,12 +21,16 @@ class Cache:
         return randomKey
 
     def get(self, key: str,
-            fn: Optional[Callable] = None) -> Union[str, bytes, int, float]:
+            fn: Optional[Callable[[bytes],
+                                  Union[str, bytes, int, float]]] = None)\
+            -> Union[str, bytes, int, float, None]:
         '''custom get() method'''
         value = self._redis.get(key)
-        if fn:
-            value = fn(value)
+        if value is None:
+            return None
 
+        if fn is not None:
+            value = fn(value)
         return value
 
     def get_str(self, key: str) -> str:
